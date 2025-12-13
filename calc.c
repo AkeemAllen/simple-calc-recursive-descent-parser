@@ -2,24 +2,37 @@
 #include <stdlib.h>
 #include <string.h>
 
+double parseSum(char **expression);
+
 double parseFactor(char **expression) {
   double result = 0;
-
   while (**expression >= '0' && **expression <= '9') {
     result = (result * 10) + (**expression - '0');
     (*expression)++;
     if (**expression == '+' || **expression == '-' || **expression == '/' ||
-        **expression == '*' || **expression == '\0') {
+        **expression == '*' || **expression == '\0' || **expression == ')') {
       return result;
     }
+  }
+
+  double inner_result;
+  if (**expression == '(') {
+    (*expression)++;
+    inner_result = parseSum(expression);
+  }
+
+  if (**expression == ')') {
+    (*expression)++;
+    return inner_result;
   }
 
   if (**expression == '-') {
     (*expression)++;
     return -parseFactor(expression);
-  } else {
-    printf("Not a digit\n");
   }
+
+  printf("Not a digit\n");
+
   return 0;
 }
 
