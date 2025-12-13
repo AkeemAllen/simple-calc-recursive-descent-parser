@@ -3,15 +3,22 @@
 #include <string.h>
 
 double parseFactor(char **expression) {
-  if (**expression >= '0' && **expression <= '9') {
-    double result = **expression - '0';
+  double result = 0;
+
+  while (**expression >= '0' && **expression <= '9') {
+    result = (result * 10) + (**expression - '0');
     (*expression)++;
-    return result;
-  } else if (**expression == '-') {
+    if (**expression == '+' || **expression == '-' || **expression == '/' ||
+        **expression == '*' || **expression == '\0') {
+      return result;
+    }
+  }
+
+  if (**expression == '-') {
     (*expression)++;
     return -parseFactor(expression);
   } else {
-    printf("Not a digit");
+    printf("Not a digit\n");
   }
   return 0;
 }
