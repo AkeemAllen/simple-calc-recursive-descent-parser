@@ -93,6 +93,27 @@ char *preProcessExpression(char *expression) {
     }
   }
 
+  // Validate Open and Closed brackets
+  char brackets[100];
+  int k = -1;
+  for (int i = 0; i < strlen(expression); i++) {
+    if (formattedExpression[i] == '(') {
+      k++;
+      brackets[k] = formattedExpression[i];
+    } else if (formattedExpression[i] == ')') {
+      if (k == -1 || brackets[k] != '(') {
+        printf("Missing Open Bracket\n");
+        assert(false);
+      }
+      k--;
+    }
+  }
+
+  if (k != -1) {
+    printf("Missing Closing Bracket\n");
+    assert(false);
+  }
+
   return formattedExpression;
 }
 
